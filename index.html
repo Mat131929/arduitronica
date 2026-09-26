@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo - Arduitronic</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .category-title {
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            color: #222;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,52 +28,136 @@
     </header>
 
     <div class="container">
-        <h1 class="section-title">Catálogo de Productos</h1>
+        <h1 class="section-title">Catálogo Completo de Productos</h1>
+        
+        <!-- Categoría: Tarjetas de Desarrollo -->
+        <h2 class="category-title">Tarjetas de Desarrollo</h2>
         <div class="catalog">
-            
             <div class="product-card">
-                <h3>Arduino Mega con cable USB</h3>
-                <p>Microprocesador Atmega2560 con 54 pines digitales.</p>
-                <div class="price">$280.00 MXN</div>
-                <button onclick="agregarAlCarrito('Arduino Mega (ARD002)', 280)">Agregar al Carrito</button>
+                <h3>Arduino UNO R3 con cable USB</h3>
+                <p>Microcontrolador ATmega328, alimentación de 7~12V, 14 pines In/Out digitales.</p>
+                <div class="price">$170.00 MXN</div>
+                <button onclick="agregarAlCarrito('Arduino UNO R3 (ARD005)', 170)">Agregar al Carrito</button>
             </div>
             
             <div class="product-card">
-                <h3>Bluetooth HC-05</h3>
-                <p>Módulo de comunicación Maestro/Esclavo V2.0+EDR.</p>
+                <h3>Arduino Mega con cable USB</h3>
+                <p>Microprocesador Atmega2560, cuenta con 54 pines digitales de entrada/salida.</p>
+                <div class="price">$280.00 MXN</div>
+                <button onclick="agregarAlCarrito('Arduino Mega (ARD002)', 280)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Arduino Nano sin cable USB</h3>
+                <p>Atmega328P. Cuenta con 14 pines digitales de entrada / salida.</p>
+                <div class="price">$90.00 MXN</div>
+                <button onclick="agregarAlCarrito('Arduino Nano (ARD006)', 90)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>ESP32 Wifi + Bluetooth</h3>
+                <p>SoC de doble núcleo a 160MHz, integra Wi-Fi y Bluetooth. Módulo MH-ET.</p>
+                <div class="price">$220.00 MXN</div>
+                <button onclick="agregarAlCarrito('ESP32 Wifi+BT (MOD012)', 220)">Agregar al Carrito</button>
+            </div>
+        </div>
+
+        <!-- Categoría: Sensores -->
+        <h2 class="category-title">Sensores</h2>
+        <div class="catalog">
+            <div class="product-card">
+                <h3>Sensor Ultrasónico HC-SR04</h3>
+                <p>Detecta objetos y calcula distancias en un rango de 2 a 450 cm.</p>
+                <div class="price">$35.00 MXN</div>
+                <button onclick="agregarAlCarrito('Sensor Ultrasónico HC-SR04 (SEN035)', 35)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Sensor de Movimiento PIR HC-SR501</h3>
+                <p>Mide cambios en radiación infrarroja a una distancia máxima de 6 metros.</p>
+                <div class="price">$35.00 MXN</div>
+                <button onclick="agregarAlCarrito('Sensor PIR (SEN025)', 35)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Sensor de Temperatura LM35</h3>
+                <p>Sensor analógico con un rango de medición desde -55 °C hasta 150 °C.</p>
+                <div class="price">$28.00 MXN</div>
+                <button onclick="agregarAlCarrito('Sensor LM35 (CMP006)', 28)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Sensor DHT22 de Temp. y Humedad</h3>
+                <p>Rango de humedad 0-100%RH y temperatura -40~80°C con alta precisión.</p>
+                <div class="price">$120.00 MXN</div>
+                <button onclick="agregarAlCarrito('Sensor DHT22 (SEN054)', 120)">Agregar al Carrito</button>
+            </div>
+        </div>
+
+        <!-- Categoría: Módulos y Displays -->
+        <h2 class="category-title">Módulos y Pantallas</h2>
+        <div class="catalog">
+            <div class="product-card">
+                <h3>Módulo Bluetooth HC-05</h3>
+                <p>Módulo Maestro/esclavo, Versión Bluetooth V2.0+EDR. Rango de 10m.</p>
                 <div class="price">$120.00 MXN</div>
                 <button onclick="agregarAlCarrito('Bluetooth HC-05 (MOD002)', 120)">Agregar al Carrito</button>
             </div>
 
             <div class="product-card">
-                <h3>Raspberry Pi 3 modelo B</h3>
-                <p>Procesador ARM a 1200 MHz, 1 GB de RAM, Wi-Fi y Bluetooth.</p>
-                <div class="price">$1100.00 MXN</div>
-                <button onclick="agregarAlCarrito('Raspberry Pi 3 (TAR013)', 1100)">Agregar al Carrito</button>
+                <h3>Módulo de 4 Relevadores</h3>
+                <p>Soporta hasta 250 VAC o 30 VDC a 10 A, ideal para aislar etapas de control.</p>
+                <div class="price">$90.00 MXN</div>
+                <button onclick="agregarAlCarrito('Módulo 4 Relevadores (MOD007)', 90)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Pantalla OLED 0.96"</h3>
+                <p>Resolución 128x64 pixeles con comunicación I2C / SPI.</p>
+                <div class="price">$130.00 MXN</div>
+                <button onclick="agregarAlCarrito('Pantalla OLED 0.96 (PAN005)', 130)">Agregar al Carrito</button>
             </div>
 
             <div class="product-card">
                 <h3>Display LCD 16x2 con Interfaz I2C</h3>
-                <p>Pantalla LCD con interfaz serial para ahorro de pines.</p>
+                <p>Controla tu display LCD con solo 2 cables gracias a la interfaz I2C.</p>
                 <div class="price">$90.00 MXN</div>
                 <button onclick="agregarAlCarrito('LCD 16x2 I2C (PAN00X)', 90)">Agregar al Carrito</button>
             </div>
+        </div>
 
+        <!-- Categoría: Herramientas y Prototipado -->
+        <h2 class="category-title">Herramientas y Prototipado</h2>
+        <div class="catalog">
             <div class="product-card">
                 <h3>Multímetro Digital</h3>
-                <p>Medición de voltaje, corriente directa, frecuencia y resistencia.</p>
+                <p>Voltaje directa: 200mV-250V Máx. Corriente Directa: 200µA - 5A.</p>
                 <div class="price">$130.00 MXN</div>
                 <button onclick="agregarAlCarrito('Multímetro Digital (ELC001)', 130)">Agregar al Carrito</button>
             </div>
 
             <div class="product-card">
-                <h3>Set de Cables Jumper 65 Pz</h3>
-                <p>Cables variados para conexiones en protoboard.</p>
-                <div class="price">$55.00 MXN</div>
-                <button onclick="agregarAlCarrito('Cables Jumper 65 Pz (CABXXX)', 55)">Agregar al Carrito</button>
+                <h3>Protoboard 830 Puntos</h3>
+                <p>Herramienta para desarrollo de sistemas digitales y hardware electrónico.</p>
+                <div class="price">$75.00 MXN</div>
+                <button onclick="agregarAlCarrito('Protoboard 830 pts (PRO003)', 75)">Agregar al Carrito</button>
             </div>
 
+            <div class="product-card">
+                <h3>Cables Dupont 20cm (40 piezas)</h3>
+                <p>Paquete de cables para conexiones. Disponibles Macho-Macho, Macho-Hembra o Hembra-Hembra.</p>
+                <div class="price">$45.00 MXN</div>
+                <button onclick="agregarAlCarrito('Cables Dupont 20cm 40pz (CABXXX)', 45)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Kit de Aprendizaje Arduino Deluxe</h3>
+                <p>Incluye placa tipo Arduino UNO R3, sensores, servomotor SG-90, motor a pasos, cables, resistencias y matriz LED 8x8.</p>
+                <div class="price">$1,000.00 MXN</div>
+                <button onclick="agregarAlCarrito('Kit Arduino Deluxe (KIT016)', 1000)">Agregar al Carrito</button>
+            </div>
         </div>
+
     </div>
 
     <footer>
