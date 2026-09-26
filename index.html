@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Arduitronic</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>Arduitronic</h2></div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Catálogo</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="ubicacion.html">Ubicación</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="section-title">Catálogo de Productos</h1>
+        <div class="catalog">
+            
+            <div class="product-card">
+                <h3>Arduino Mega con cable USB</h3>
+                <p>Microprocesador Atmega2560 con 54 pines digitales.</p>
+                <div class="price">$280.00 MXN</div>
+                <button onclick="agregarAlCarrito('Arduino Mega (ARD002)', 280)">Agregar al Carrito</button>
+            </div>
+            
+            <div class="product-card">
+                <h3>Bluetooth HC-05</h3>
+                <p>Módulo de comunicación Maestro/Esclavo V2.0+EDR.</p>
+                <div class="price">$120.00 MXN</div>
+                <button onclick="agregarAlCarrito('Bluetooth HC-05 (MOD002)', 120)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Raspberry Pi 3 modelo B</h3>
+                <p>Procesador ARM a 1200 MHz, 1 GB de RAM, Wi-Fi y Bluetooth.</p>
+                <div class="price">$1100.00 MXN</div>
+                <button onclick="agregarAlCarrito('Raspberry Pi 3 (TAR013)', 1100)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Display LCD 16x2 con Interfaz I2C</h3>
+                <p>Pantalla LCD con interfaz serial para ahorro de pines.</p>
+                <div class="price">$90.00 MXN</div>
+                <button onclick="agregarAlCarrito('LCD 16x2 I2C (PAN00X)', 90)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Multímetro Digital</h3>
+                <p>Medición de voltaje, corriente directa, frecuencia y resistencia.</p>
+                <div class="price">$130.00 MXN</div>
+                <button onclick="agregarAlCarrito('Multímetro Digital (ELC001)', 130)">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <h3>Set de Cables Jumper 65 Pz</h3>
+                <p>Cables variados para conexiones en protoboard.</p>
+                <div class="price">$55.00 MXN</div>
+                <button onclick="agregarAlCarrito('Cables Jumper 65 Pz (CABXXX)', 55)">Agregar al Carrito</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>Arduitronic - Todos los derechos reservados.</p>
+        <p style="font-size: 0.8rem; color: #aaa;">Desarrollado por DigiWeb Solutions - Ingeniería en Tecnologías de la Información (UPSLP)</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
