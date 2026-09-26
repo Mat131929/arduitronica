@@ -79,7 +79,7 @@ function procesarPagoPorWhatsApp() {
     const mensajeCodificado = encodeURIComponent(mensaje);
 
     // 5. Número de teléfono de Arduitronic (incluyendo el +52 de México)
-    const telefonoArduitronic = "525535692446"; 
+    const telefonoArduitronic = "524861280332"; 
 
     // 6. Crear la URL de la API de WhatsApp y abrirla en una nueva pestaña
     const urlWhatsApp = `https://wa.me/${telefonoArduitronic}?text=${mensajeCodificado}`;
