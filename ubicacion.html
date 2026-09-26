@@ -5,37 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ubicación - Arduitronic</title>
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- Script de la API de Google Maps -->
-    <!-- IMPORTANTE: Reemplaza 'TU_API_KEY_AQUI' con tu clave real de la API de Google Maps -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&callback=initMap"></script>
-    
-    <script>
-        function initMap() {
-            // Coordenadas para Blvrd Manuel Gómez Azcárate 138A, San Luis Potosí
-            const arduitronicLocation = { lat: 22.1333, lng: -100.9780 }; 
-            
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 17,
-                center: arduitronicLocation,
-            });
-
-            const marker = new google.maps.Marker({
-                position: arduitronicLocation,
-                map: map,
-                title: "Arduitronic",
-                animation: google.maps.Animation.DROP
-            });
-            
-            const infoWindow = new google.maps.InfoWindow({
-                content: "<h3>Arduitronic</h3><p>Blvrd Manuel Gómez Azcárate 138A<br>Himno Nacional Segunda Sección, 78369 San Luis Potosí, S.L.P.</p>"
-            });
-            
-            marker.addListener("click", () => {
-                infoWindow.open(map, marker);
-            });
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -55,8 +24,22 @@
             <strong>Dirección:</strong> Blvrd Manuel Gómez Azcárate 138A, Himno Nacional Segunda Sección, 78369 San Luis Potosí, S.L.P., México.
         </p>
         
-        <!-- Contenedor del Mapa -->
-        <div id="map"></div>
+        <!-- Contenedor del Mapa mediante Iframe (Gratuito y sin API Key) -->
+        <div id="map" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <iframe 
+                width="100%" 
+                height="500" 
+                src="https://maps.google.com/maps?q=Blvrd%20Manuel%20G%C3%B3mez%20Azc%C3%A1rate%20138A,%20San%20Luis%20Potos%C3%AD&t=&z=17&ie=UTF8&iwloc=&output=embed" 
+                frameborder="0" 
+                scrolling="no" 
+                marginheight="0" 
+                marginwidth="0"
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
     </div>
 
     <footer>
