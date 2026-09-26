@@ -4,13 +4,18 @@
     --text-color: #333;
     --accent-color: #ff9900;
 }
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: var(--secondary-color);
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Mantiene el pie de página siempre abajo */
 }
+
 header {
     background-color: var(--primary-color);
     color: white;
@@ -18,41 +23,63 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
+
+.logo h2 {
+    margin: 0;
+}
+
 nav ul {
     list-style: none;
     display: flex;
     gap: 1.5rem;
     margin: 0;
     padding: 0;
+    flex-wrap: wrap;
+    justify-content: center;
 }
+
 nav a {
     color: white;
     text-decoration: none;
     font-weight: bold;
     padding: 0.5rem;
 }
+
 nav a:hover {
     background-color: rgba(255,255,255,0.2);
     border-radius: 4px;
 }
+
 .container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
-    min-height: 60vh;
+    flex: 1; 
 }
+
 .section-title {
     text-align: center;
     margin-bottom: 2rem;
     color: var(--primary-color);
 }
-/* Catálogo */
+
+.category-title {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: #222;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Catálogo - Diseño Grid base */
 .catalog {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
 }
+
 .product-card {
     background: white;
     padding: 1.5rem;
@@ -60,16 +87,22 @@ nav a:hover {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
     transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
 .product-card:hover {
     transform: translateY(-5px);
 }
+
 .price {
     color: var(--accent-color);
     font-weight: bold;
     font-size: 1.2rem;
     margin: 1rem 0;
 }
+
 button {
     background-color: var(--primary-color);
     color: white;
@@ -79,10 +112,13 @@ button {
     cursor: pointer;
     width: 100%;
     font-weight: bold;
+    font-size: 1rem;
 }
+
 button:hover {
     background-color: #003d82;
 }
+
 /* Carrito */
 .cart-list {
     background: white;
@@ -90,29 +126,77 @@ button:hover {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
+
 .cart-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #eee;
     padding: 1rem 0;
+    gap: 1rem;
 }
+
 .remove-btn {
     background-color: #dc3545;
     width: auto;
     padding: 0.3rem 0.6rem;
+    margin-left: 1rem;
 }
+
 /* Footer */
 footer {
     background-color: #222;
     color: white;
-    padding: 2rem;
+    padding: 2rem 1rem;
     text-align: center;
     margin-top: auto;
 }
+
 /* Mapa */
 #map {
     height: 500px;
     width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* ======================================================== */
+/* MEDIA QUERIES PARA DISEÑO RESPONSIVO (MÓVILES Y TABLETS) */
+/* ======================================================== */
+
+@media (max-width: 768px) {
+    /* Ajusta el encabezado para que el logo y el menú se apilen */
+    header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    nav ul {
+        gap: 0.5rem;
+    }
+    
+    /* En móviles muy estrechos, fuerza las tarjetas a ocupar el ancho total */
+    .catalog {
+        grid-template-columns: 1fr; 
+    }
+    
+    /* Ajusta el carrito para que los elementos fluyan hacia abajo */
+    .cart-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .remove-btn {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        width: 100%; /* Botón de eliminar más fácil de presionar en móviles */
+    }
+    
+    /* Reduce la altura del mapa para que no ocupe toda la pantalla del teléfono */
+    #map {
+        height: 350px;
+    }
 }
