@@ -27,7 +27,15 @@
             <h2 style="text-align: right; margin-top: 2rem; color: #0056b3;">
                 Subtotal: $<span id="subtotal">0.00</span> MXN
             </h2>
-            <button style="margin-top: 1rem;">Proceder al Pago</button>
+            
+            <!-- Sección de pago por WhatsApp -->
+            <div style="margin-top: 2rem; background: var(--secondary-color); padding: 1.5rem; border-radius: 8px;">
+                <h3>Completar Pedido</h3>
+                <input type="text" id="nombreCliente" placeholder="Ingresa tu nombre y/o matrícula" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                <button onclick="procesarPagoPorWhatsApp()" style="background-color: #25D366; font-size: 1.1rem;">
+                    Enviar Pedido por WhatsApp
+                </button>
+            </div>
         </div>
     </div>
 
