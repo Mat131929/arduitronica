@@ -1,8 +1,10 @@
 :root {
-    --primary-color: #0056b3;
-    --secondary-color: #f4f4f4;
+    --primary-color: #004085;
+    --secondary-color: #f8f9fa;
     --text-color: #333;
     --accent-color: #ff9900;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
 }
 
 body {
@@ -13,7 +15,7 @@ body {
     color: var(--text-color);
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Mantiene el pie de página siempre abajo */
+    min-height: 100vh;
 }
 
 header {
@@ -24,11 +26,10 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.logo h2 {
-    margin: 0;
-}
+header h2 { margin: 0; }
 
 nav ul {
     list-style: none;
@@ -37,26 +38,26 @@ nav ul {
     margin: 0;
     padding: 0;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 nav a {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.3s;
 }
 
-nav a:hover {
-    background-color: rgba(255,255,255,0.2);
-    border-radius: 4px;
-}
+nav a:hover, nav a.active { background-color: rgba(255,255,255,0.2); }
 
 .container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
     flex: 1; 
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .section-title {
@@ -73,7 +74,21 @@ nav a:hover {
     padding-bottom: 0.5rem;
 }
 
-/* Catálogo - Diseño Grid base */
+/* Botón de descarga PDF */
+.btn-descarga {
+    display: inline-block;
+    background-color: var(--danger-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+.btn-descarga:hover { transform: scale(1.05); }
+
+/* Catálogo y Tarjetas */
 .catalog {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -84,16 +99,18 @@ nav a:hover {
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     text-align: center;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border: 1px solid #eee;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.1);
 }
 
 .price {
@@ -101,6 +118,12 @@ nav a:hover {
     font-weight: bold;
     font-size: 1.2rem;
     margin: 1rem 0;
+}
+
+.stock-info {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
 }
 
 button {
@@ -112,19 +135,25 @@ button {
     cursor: pointer;
     width: 100%;
     font-weight: bold;
-    font-size: 1rem;
+    transition: background 0.3s;
 }
 
-button:hover {
-    background-color: #003d82;
+button:hover { background-color: #002752; }
+button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+/* Carrito y Formulario de Pago */
+.cart-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
 }
 
-/* Carrito */
-.cart-list {
+.cart-list, .checkout-form {
     background: white;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
 }
 
 .cart-item {
@@ -133,17 +162,69 @@ button:hover {
     align-items: center;
     border-bottom: 1px solid #eee;
     padding: 1rem 0;
-    gap: 1rem;
 }
 
 .remove-btn {
-    background-color: #dc3545;
+    background-color: var(--danger-color);
     width: auto;
     padding: 0.3rem 0.6rem;
     margin-left: 1rem;
 }
 
-/* Footer */
+.input-group { margin-bottom: 1rem; }
+.input-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 0.9rem;}
+.input-group input { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;}
+.row-inputs { display: flex; gap: 1rem; }
+
+/* Panel Admin */
+.admin-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.stat-box {
+    background: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+.stat-box h3 { margin: 0 0 0.5rem 0; font-size: 2rem;}
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+th { background-color: #f4f4f4; }
+.admin-action-btn { width: auto; padding: 0.4rem 0.8rem; font-size: 0.9rem;}
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+.toast {
+    background-color: #333;
+    color: white;
+    padding: 1rem 1.5rem;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background-color: var(--success-color); }
+.toast.error { background-color: var(--danger-color); }
+
 footer {
     background-color: #222;
     color: white;
@@ -152,51 +233,9 @@ footer {
     margin-top: auto;
 }
 
-/* Mapa */
-#map {
-    height: 500px;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-/* ======================================================== */
-/* MEDIA QUERIES PARA DISEÑO RESPONSIVO (MÓVILES Y TABLETS) */
-/* ======================================================== */
-
 @media (max-width: 768px) {
-    /* Ajusta el encabezado para que el logo y el menú se apilen */
-    header {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-        padding: 1rem;
-    }
-    
-    nav ul {
-        gap: 0.5rem;
-    }
-    
-    /* En móviles muy estrechos, fuerza las tarjetas a ocupar el ancho total */
-    .catalog {
-        grid-template-columns: 1fr; 
-    }
-    
-    /* Ajusta el carrito para que los elementos fluyan hacia abajo */
-    .cart-item {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .remove-btn {
-        margin-left: 0;
-        margin-top: 0.5rem;
-        width: 100%; /* Botón de eliminar más fácil de presionar en móviles */
-    }
-    
-    /* Reduce la altura del mapa para que no ocupe toda la pantalla del teléfono */
-    #map {
-        height: 350px;
-    }
+    header { flex-direction: column; text-align: center; gap: 1rem; }
+    .cart-container { grid-template-columns: 1fr; }
+    .row-inputs { flex-direction: column; gap: 0; }
+    table { display: block; overflow-x: auto; }
 }
