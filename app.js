@@ -1,87 +1,270 @@
-// Cargar el carrito desde localStorage o inicializar uno vacío
-let carrito = JSON.parse(localStorage.getItem('carritoArduitronic')) || [];
+// ==========================================
+// 1. BASE DE DATOS SIMULADA (LOCALSTORAGE)
+// ==========================================
+const defaultProducts = [
+    { id: 'ARD005', nombre: 'Arduino UNO R3 con cable', categoria: 'Tarjetas de Desarrollo', precio: 170.00, stock: 15, desc: 'Microcontrolador ATmega328, alimentación de 7~12V.' },
+    { id: 'ARD002', nombre: 'Arduino Mega con cable', categoria: 'Tarjetas de Desarrollo', precio: 280.00, stock: 8, desc: 'Atmega2560, 54 pines digitales.' },
+    { id: 'ARD006', nombre: 'Arduino Nano sin cable', categoria: 'Tarjetas de Desarrollo', precio: 90.00, stock: 20, desc: 'Atmega328P. 14 pines de entrada/salida.' },
+    { id: 'MOD012', nombre: 'ESP32 Wifi + Bluetooth', categoria: 'Tarjetas de Desarrollo', precio: 220.00, stock: 12, desc: 'SoC doble núcleo a 160MHz. Módulo MH-ET.' },
+    
+    { id: 'SEN035', nombre: 'Sensor Ultrasónico HC-SR04', categoria: 'Sensores', precio: 35.00, stock: 50, desc: 'Detecta objetos de 2 a 450 cm.' },
+    { id: 'SEN025', nombre: 'Sensor de Movimiento PIR', categoria: 'Sensores', precio: 35.00, stock: 30, desc: 'Distancia máxima de 6 metros.' },
+    { id: 'CMP006', nombre: 'Sensor de Temperatura LM35', categoria: 'Sensores', precio: 28.00, stock: 40, desc: 'Rango de -55 °C hasta 150 °C.' },
+    { id: 'SEN054', nombre: 'Sensor DHT22 Temp/Humedad', categoria: 'Sensores', precio: 120.00, stock: 15, desc: 'Precisión de -40~80°C.' },
+    
+    { id: 'MOD002', nombre: 'Módulo Bluetooth HC-05', categoria: 'Módulos y Pantallas', precio: 120.00, stock: 25, desc: 'Maestro/esclavo V2.0+EDR.' },
+    { id: 'MOD007', nombre: 'Módulo 4 Relevadores', categoria: 'Módulos y Pantallas', precio: 90.00, stock: 10, desc: 'Soporta 250 VAC a 10 A.' },
+    { id: 'PAN005', nombre: 'Pantalla OLED 0.96"', categoria: 'Módulos y Pantallas', precio: 130.00, stock: 18, desc: 'Resolución 128x64 pixeles I2C.' },
+    { id: 'PAN00X', nombre: 'Display LCD 16x2 I2C', categoria: 'Módulos y Pantallas', precio: 90.00, stock: 22, desc: 'Control LCD con solo 2 cables.' },
 
-function agregarAlCarrito(nombre, precio) {
-    carrito.push({ nombre, precio });
-    localStorage.setItem('carritoArduitronic', JSON.stringify(carrito));
-    alert(nombre + " ha sido agregado al carrito.");
+    { id: 'ELC001', nombre: 'Multímetro Digital', categoria: 'Herramientas y Prototipado', precio: 130.00, stock: 5, desc: 'Voltaje, corriente y resistencia.' },
+    { id: 'PRO003', nombre: 'Protoboard 830 Puntos', categoria: 'Herramientas y Prototipado', precio: 75.00, stock: 35, desc: 'Desarrollo de sistemas digitales.' },
+    { id: 'CABXXX', nombre: 'Cables Dupont 20cm (40pz)', categoria: 'Herramientas y Prototipado', precio: 45.00, stock: 100, desc: 'M-M, M-H, H-H.' },
+    { id: 'KIT016', nombre: 'Kit Arduino Deluxe', categoria: 'Herramientas y Prototipado', precio: 1000.00, stock: 3, desc: 'Incluye sensores, motores y componentes.' }
+];
+
+// Inicializar DB si está vacía
+if (!localStorage.getItem('dbProductos')) { localStorage.setItem('dbProductos', JSON.stringify(defaultProducts)); }
+if (!localStorage.getItem('dbCarrito')) { localStorage.setItem('dbCarrito', JSON.stringify([])); }
+if (!localStorage.getItem('dbVentas')) { localStorage.setItem('dbVentas', JSON.stringify([])); }
+
+// ==========================================
+// 2. UTILIDADES (TOASTS)
+// ==========================================
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerText = message;
+    container.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
-function renderizarCarrito() {
-    const listaCarrito = document.getElementById('lista-carrito');
-    const subtotalElement = document.getElementById('subtotal');
+// ==========================================
+// 3. LÓGICA DE LA TIENDA (CATÁLOGO Y CARRITO)
+// ==========================================
+function renderizarCatalogo() {
+    const contenedor = document.getElementById('catalogo-dinamico');
+    if (!contenedor) return;
+
+    const productos = JSON.parse(localStorage.getItem('dbProductos'));
+    contenedor.innerHTML = '';
+
+    // Agrupar por categoría
+    const categorias = [...new Set(productos.map(p => p.categoria))];
+
+    categorias.forEach(cat => {
+        const catProds = productos.filter(p => p.categoria === cat);
+        
+        const title = document.createElement('h2');
+        title.className = 'category-title';
+        title.innerText = cat;
+        contenedor.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'catalog';
+        
+        catProds.forEach(prod => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            const disableBtn = prod.stock <= 0 ? 'disabled' : '';
+            const btnText = prod.stock <= 0 ? 'Agotado' : 'Agregar al Carrito';
+            
+            card.innerHTML = `
+                <div>
+                    <h3>${prod.nombre}</h3>
+                    <p>${prod.desc}</p>
+                </div>
+                <div>
+                    <div class="price">$${prod.precio.toFixed(2)} MXN</div>
+                    <div class="stock-info">Disponibles: ${prod.stock} pz</div>
+                    <button ${disableBtn} onclick="agregarAlCarrito('${prod.id}')">${btnText}</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+        contenedor.appendChild(grid);
+    });
+}
+
+function agregarAlCarrito(idProducto) {
+    const productos = JSON.parse(localStorage.getItem('dbProductos'));
+    let carrito = JSON.parse(localStorage.getItem('dbCarrito'));
     
-    if (!listaCarrito) return; // Salir si no estamos en la página del carrito
-
-    listaCarrito.innerHTML = '';
-    let subtotal = 0;
-
-    if (carrito.length === 0) {
-        listaCarrito.innerHTML = '<p style="text-align:center;">Tu carrito está vacío.</p>';
-        subtotalElement.innerText = '0.00';
+    const producto = productos.find(p => p.id === idProducto);
+    
+    // Verificar stock temporal en el carrito
+    const enCarrito = carrito.filter(item => item.id === idProducto).length;
+    if (enCarrito >= producto.stock) {
+        showToast('No hay más stock disponible de este producto', 'error');
         return;
     }
 
-    carrito.forEach((producto, index) => {
-        const item = document.createElement('div');
-        item.className = 'cart-item';
-        item.innerHTML = `
-            <span>${producto.nombre}</span> 
-            <span>
-                $${producto.precio.toFixed(2)} MXN 
-                <button class="remove-btn" onclick="eliminarDelCarrito(${index})">X</button>
-            </span>
-        `;
-        listaCarrito.appendChild(item);
-        subtotal += producto.precio;
-    });
-
-    subtotalElement.innerText = subtotal.toFixed(2);
-}
-
-function eliminarDelCarrito(index) {
-    carrito.splice(index, 1);
-    localStorage.setItem('carritoArduitronic', JSON.stringify(carrito));
+    carrito.push(producto);
+    localStorage.setItem('dbCarrito', JSON.stringify(carrito));
+    showToast(`${producto.nombre} agregado al carrito`);
     renderizarCarrito();
 }
 
-// Ejecutar al cargar la página (útil para la página del carrito)
-document.addEventListener("DOMContentLoaded", renderizarCarrito);
+function renderizarCarrito() {
+    const lista = document.getElementById('lista-carrito');
+    const subtotalEl = document.getElementById('subtotal');
+    if (!lista) return;
 
-// Función para enviar el pedido por WhatsApp
-function procesarPagoPorWhatsApp() {
-    // 1. Verificar si el carrito tiene productos
-    if (carrito.length === 0) {
-        alert("Tu carrito está vacío. Agrega productos del catálogo primero.");
-        return;
-    }
-
-    // 2. Obtener el nombre del cliente
-    const nombreCliente = document.getElementById('nombreCliente').value.trim();
-    if (nombreCliente === "") {
-        alert("Por favor, ingresa tu nombre para identificar tu pedido.");
-        return;
-    }
-
-    // 3. Armar el mensaje para WhatsApp
-    let mensaje = `Hola Arduitronic, soy ${nombreCliente}. Me gustaría apartar el siguiente material escolar:\n\n`;
+    const carrito = JSON.parse(localStorage.getItem('dbCarrito'));
+    lista.innerHTML = '';
     let subtotal = 0;
 
-    carrito.forEach((producto) => {
-        mensaje += `- 1x ${producto.nombre} ($${producto.precio.toFixed(2)})\n`;
-        subtotal += producto.precio;
+    if (carrito.length === 0) {
+        lista.innerHTML = '<p style="text-align:center; color:#666;">Tu carrito está vacío.</p>';
+        subtotalEl.innerText = '0.00';
+        return;
+    }
+
+    carrito.forEach((prod, index) => {
+        const item = document.createElement('div');
+        item.className = 'cart-item';
+        item.innerHTML = `
+            <span><strong>${prod.id}</strong> - ${prod.nombre}</span> 
+            <span>$${prod.precio.toFixed(2)} 
+                <button class="remove-btn" onclick="eliminarDelCarrito(${index})">X</button>
+            </span>
+        `;
+        lista.appendChild(item);
+        subtotal += prod.precio;
     });
 
-    mensaje += `\n*Total a pagar en tienda: $${subtotal.toFixed(2)} MXN*\n\n`;
-    mensaje += `Paso a recogerlo en un momento. ¡Gracias!`;
-
-    // 4. Codificar el mensaje para formato URL
-    const mensajeCodificado = encodeURIComponent(mensaje);
-
-    // 5. Número de teléfono de Arduitronic (incluyendo el +52 de México)
-    const telefonoArduitronic = "524861280332"; 
-
-    // 6. Crear la URL de la API de WhatsApp y abrirla en una nueva pestaña
-    const urlWhatsApp = `https://wa.me/${telefonoArduitronic}?text=${mensajeCodificado}`;
-    window.open(urlWhatsApp, '_blank');
+    subtotalEl.innerText = subtotal.toFixed(2);
 }
+
+function eliminarDelCarrito(index) {
+    let carrito = JSON.parse(localStorage.getItem('dbCarrito'));
+    carrito.splice(index, 1);
+    localStorage.setItem('dbCarrito', JSON.stringify(carrito));
+    renderizarCarrito();
+}
+
+// Simulador de Pasarela de Pago
+function procesarPagoSimulado(e) {
+    e.preventDefault();
+    const carrito = JSON.parse(localStorage.getItem('dbCarrito'));
+    
+    if (carrito.length === 0) {
+        showToast('Agrega productos al carrito primero', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('btn-pagar');
+    btn.innerText = "Procesando...";
+    btn.disabled = true;
+
+    // Simular tiempo de conexión al banco
+    setTimeout(() => {
+        // 1. Guardar la venta
+        const ventas = JSON.parse(localStorage.getItem('dbVentas'));
+        const total = carrito.reduce((sum, p) => sum + p.precio, 0);
+        ventas.push({
+            fecha: new Date().toLocaleString(),
+            total: total,
+            items: carrito.length,
+            cliente: document.getElementById('cc-name').value
+        });
+        localStorage.setItem('dbVentas', JSON.stringify(ventas));
+
+        // 2. Descontar del inventario
+        const productos = JSON.parse(localStorage.getItem('dbProductos'));
+        carrito.forEach(cartItem => {
+            const prodIndex = productos.findIndex(p => p.id === cartItem.id);
+            if(prodIndex > -1) { productos[prodIndex].stock -= 1; }
+        });
+        localStorage.setItem('dbProductos', JSON.stringify(productos));
+
+        // 3. Limpiar carrito y avisar
+        localStorage.setItem('dbCarrito', JSON.stringify([]));
+        showToast('¡Pago aprobado! Redirigiendo...', 'success');
+        
+        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+    }, 1500);
+}
+
+// ==========================================
+// 4. LÓGICA DEL PANEL DE ADMINISTRADOR
+// ==========================================
+function loginAdmin(e) {
+    e.preventDefault();
+    const pass = document.getElementById('admin-pass').value;
+    // Contraseña simulada: admin123
+    if (pass === 'admin123') {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('dashboard-section').style.display = 'block';
+        showToast('Acceso concedido', 'success');
+        cargarDatosAdmin();
+    } else {
+        showToast('Contraseña incorrecta', 'error');
+    }
+}
+
+function cargarDatosAdmin() {
+    const productos = JSON.parse(localStorage.getItem('dbProductos'));
+    const ventas = JSON.parse(localStorage.getItem('dbVentas'));
+
+    // Estadísticas
+    const ingresosTotales = ventas.reduce((sum, v) => sum + v.total, 0);
+    const articulosVendidos = ventas.reduce((sum, v) => sum + v.items, 0);
+    
+    document.getElementById('stat-ingresos').innerText = `$${ingresosTotales.toFixed(2)}`;
+    document.getElementById('stat-ventas').innerText = ventas.length;
+    document.getElementById('stat-articulos').innerText = articulosVendidos;
+
+    // Tabla de Inventario
+    const tbody = document.getElementById('admin-inventory-body');
+    tbody.innerHTML = '';
+    productos.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${p.id}</td>
+            <td>${p.nombre}</td>
+            <td>$${p.precio.toFixed(2)}</td>
+            <td>
+                <input type="number" id="stock-${p.id}" value="${p.stock}" style="width:60px; padding:0.3rem;">
+            </td>
+            <td>
+                <button class="admin-action-btn" onclick="actualizarStock('${p.id}')">Guardar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function actualizarStock(id) {
+    const productos = JSON.parse(localStorage.getItem('dbProductos'));
+    const nuevoStock = parseInt(document.getElementById(`stock-${id}`).value);
+    
+    const index = productos.findIndex(p => p.id === id);
+    if(index > -1) {
+        productos[index].stock = nuevoStock;
+        localStorage.setItem('dbProductos', JSON.stringify(productos));
+        showToast('Inventario actualizado', 'success');
+    }
+}
+
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // Si existe el div de toasts, lo creamos
+    if (!document.getElementById('toast-container')) {
+        const tc = document.createElement('div');
+        tc.id = 'toast-container';
+        document.body.appendChild(tc);
+    }
+
+    renderizarCatalogo();
+    renderizarCarrito();
+});
