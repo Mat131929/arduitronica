@@ -15,6 +15,7 @@
                 <li><a href="carrito.html" class="active">Carrito</a></li>
                 <li><a href="ubicacion.html">Ubicación</a></li>
                 <li><a href="admin.html">Admin</a></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()">🌓 Modo</button></li>
             </ul>
         </nav>
     </header>
@@ -32,35 +33,45 @@
                 </h2>
             </div>
 
-            <!-- Formulario de Pago Tarjeta -->
-            <div class="checkout-form">
-                <h3>Pago Seguro</h3>
-                <form onsubmit="procesarPagoSimulado(event)">
+            <!-- Opciones de Checkout -->
+            <div class="checkout-options">
+                
+                <!-- Opción 1: WhatsApp -->
+                <div class="checkout-form" style="margin-bottom: 1.5rem; border-left: 4px solid #25D366;">
+                    <h3>Opción 1: Apartar en Tienda</h3>
+                    <p style="font-size: 0.85rem; color: #8b949e; margin-bottom: 1rem;">Envía tu lista por WhatsApp y paga al recoger (Efectivo/Tarjeta).</p>
                     <div class="input-group">
-                        <label for="cc-name">Nombre en la tarjeta</label>
-                        <input type="text" id="cc-name" required placeholder="Ej. Miguel Mateo Jaramillo">
+                        <input type="text" id="wa-name" placeholder="Ingresa tu nombre / matrícula">
                     </div>
-                    <div class="input-group">
-                        <label for="cc-num">Número de Tarjeta</label>
-                        <input type="text" id="cc-num" required pattern="[0-9]{16}" placeholder="1234 5678 9101 1121" maxlength="16">
-                    </div>
-                    <div class="row-inputs">
-                        <div class="input-group" style="flex:1;">
-                            <label for="cc-exp">Vencimiento</label>
-                            <input type="text" id="cc-exp" required placeholder="MM/YY" maxlength="5">
-                        </div>
-                        <div class="input-group" style="flex:1;">
-                            <label for="cc-cvv">CVV</label>
-                            <input type="password" id="cc-cvv" required placeholder="***" maxlength="3">
-                        </div>
-                    </div>
-                    <button type="submit" id="btn-pagar" style="background-color: var(--success-color); margin-top: 1rem;">
-                        Pagar y Finalizar
+                    <button onclick="procesarPagoPorWhatsApp()" style="background-color: #25D366;">
+                        📱 Apartar por WhatsApp
                     </button>
-                </form>
-                <p style="font-size:0.8rem; color:#888; text-align:center; margin-top:1rem;">
-                    *Esto es un simulador. No ingreses datos bancarios reales.
-                </p>
+                </div>
+
+                <!-- Opción 2: Tarjeta Simulado -->
+                <div class="checkout-form" style="border-left: 4px solid var(--primary-color);">
+                    <h3>Opción 2: Pago en Línea</h3>
+                    <p style="font-size: 0.85rem; color: #8b949e; margin-bottom: 1rem;">Paga ahora y recoge tus componentes directo en el mostrador.</p>
+                    <form onsubmit="procesarPagoSimulado(event)">
+                        <div class="input-group">
+                            <input type="text" id="cc-name" required placeholder="Nombre en la tarjeta (Simulado)">
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="cc-num" required pattern="[0-9]{16}" placeholder="1234 5678 9101 1121" maxlength="16">
+                        </div>
+                        <div class="row-inputs">
+                            <div class="input-group" style="flex:1;">
+                                <input type="text" id="cc-exp" required placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="input-group" style="flex:1;">
+                                <input type="password" id="cc-cvv" required placeholder="CVV" maxlength="3">
+                            </div>
+                        </div>
+                        <button type="submit" id="btn-pagar" style="background-color: var(--success-color);">
+                            Pagar con Tarjeta
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
