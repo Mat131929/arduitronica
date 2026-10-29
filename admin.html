@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>Arduitronic Admin</h2></div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Volver a la Tienda</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="section-title">Panel de Control</h1>
+
+        <!-- Login -->
+        <div id="login-section" class="admin-card" style="max-width: 400px; margin: 0 auto;">
+            <h3 style="text-align: center;">Acceso Restringido</h3>
+            <form onsubmit="loginAdmin(event)">
+                <div class="input-group">
+                    <label>Contraseña de Administrador (admin123)</label>
+                    <input type="password" id="admin-pass" required>
+                </div>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+
+        <!-- Dashboard (Oculto hasta hacer login) -->
+        <div id="dashboard-section" style="display: none;">
+            
+            <!-- Resumen de Ventas -->
+            <div class="dashboard-stats">
+                <div class="stat-box">
+                    <h3 id="stat-ingresos">$0.00</h3>
+                    <p>Ingresos Totales</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="stat-ventas">0</h3>
+                    <p>Tickets Emitidos</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="stat-articulos">0</h3>
+                    <p>Artículos Vendidos</p>
+                </div>
+            </div>
+
+            <!-- Control de Inventario -->
+            <div class="admin-card">
+                <h3>Gestión de Inventario (Stock)</h3>
+                <p style="font-size: 0.9rem; color: #666;">Al cambiar el stock aquí, se reflejará en tiempo real en la tienda.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock Disponible</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-inventory-body">
+                        <!-- Se llena mediante JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>Arduitronic - Todos los derechos reservados.</p>
+        <p style="font-size: 0.8rem; color: #aaa;">Panel de Administración Simulado</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
