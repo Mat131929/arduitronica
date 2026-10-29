@@ -13,7 +13,8 @@
             <ul>
                 <li><a href="index.html">Catálogo</a></li>
                 <li><a href="carrito.html">Carrito</a></li>
-                <li><a href="ubicacion.html">Ubicación</a></li>
+                <li><a href="ubicacion.html" class="active">Ubicación</a></li>
+                <li><a href="admin.html">Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -24,27 +25,18 @@
             <strong>Dirección:</strong> Blvrd Manuel Gómez Azcárate 138A, Himno Nacional Segunda Sección, 78369 San Luis Potosí, S.L.P., México.
         </p>
         
-        <!-- Contenedor del Mapa mediante Iframe (Gratuito y sin API Key) -->
         <div id="map" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <iframe 
-                width="100%" 
-                height="500" 
+                width="100%" height="500" 
                 src="https://maps.google.com/maps?q=Blvrd%20Manuel%20G%C3%B3mez%20Azc%C3%A1rate%20138A,%20San%20Luis%20Potos%C3%AD&t=&z=17&ie=UTF8&iwloc=&output=embed" 
-                frameborder="0" 
-                scrolling="no" 
-                marginheight="0" 
-                marginwidth="0"
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
+                frameborder="0" scrolling="no" marginheight="0" marginwidth="0" style="border:0;" allowfullscreen="" loading="lazy">
             </iframe>
         </div>
     </div>
 
     <footer>
         <p>Arduitronic - Todos los derechos reservados.</p>
-        <p style="font-size: 0.8rem; color: #aaa;">Desarrollado por DigiWeb Solutions - Ingeniería en Tecnologías de la Información (UPSLP)</p>
+        <p style="font-size: 0.8rem; color: #aaa;">Proyecto Simulado - DigiWeb Solutions (UPSLP)</p>
     </footer>
 
     <script src="app.js"></script>
