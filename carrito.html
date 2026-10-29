@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito - Arduitronic</title>
+    <title>Checkout - Arduitronic</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,36 +12,62 @@
         <nav>
             <ul>
                 <li><a href="index.html">Catálogo</a></li>
-                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="carrito.html" class="active">Carrito</a></li>
                 <li><a href="ubicacion.html">Ubicación</a></li>
+                <li><a href="admin.html">Admin</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
-        <h1 class="section-title">Tu Pedido</h1>
-        <div class="cart-list">
-            <div id="lista-carrito">
-                <!-- Se llena mediante JavaScript -->
+        <h1 class="section-title">Finalizar Compra</h1>
+        
+        <div class="cart-container">
+            <!-- Lista de Artículos -->
+            <div class="cart-list">
+                <h3>Tu Pedido</h3>
+                <div id="lista-carrito"></div>
+                <h2 style="text-align: right; margin-top: 2rem; color: var(--primary-color);">
+                    Total: $<span id="subtotal">0.00</span> MXN
+                </h2>
             </div>
-            <h2 style="text-align: right; margin-top: 2rem; color: #0056b3;">
-                Subtotal: $<span id="subtotal">0.00</span> MXN
-            </h2>
-            
-            <!-- Sección de pago por WhatsApp -->
-            <div style="margin-top: 2rem; background: var(--secondary-color); padding: 1.5rem; border-radius: 8px;">
-                <h3>Completar Pedido</h3>
-                <input type="text" id="nombreCliente" placeholder="Ingresa tu nombre y/o matrícula" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                <button onclick="procesarPagoPorWhatsApp()" style="background-color: #25D366; font-size: 1.1rem;">
-                    Enviar Pedido por WhatsApp
-                </button>
+
+            <!-- Formulario de Pago Tarjeta -->
+            <div class="checkout-form">
+                <h3>Pago Seguro</h3>
+                <form onsubmit="procesarPagoSimulado(event)">
+                    <div class="input-group">
+                        <label for="cc-name">Nombre en la tarjeta</label>
+                        <input type="text" id="cc-name" required placeholder="Ej. Miguel Mateo Jaramillo">
+                    </div>
+                    <div class="input-group">
+                        <label for="cc-num">Número de Tarjeta</label>
+                        <input type="text" id="cc-num" required pattern="[0-9]{16}" placeholder="1234 5678 9101 1121" maxlength="16">
+                    </div>
+                    <div class="row-inputs">
+                        <div class="input-group" style="flex:1;">
+                            <label for="cc-exp">Vencimiento</label>
+                            <input type="text" id="cc-exp" required placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="input-group" style="flex:1;">
+                            <label for="cc-cvv">CVV</label>
+                            <input type="password" id="cc-cvv" required placeholder="***" maxlength="3">
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-pagar" style="background-color: var(--success-color); margin-top: 1rem;">
+                        Pagar y Finalizar
+                    </button>
+                </form>
+                <p style="font-size:0.8rem; color:#888; text-align:center; margin-top:1rem;">
+                    *Esto es un simulador. No ingreses datos bancarios reales.
+                </p>
             </div>
         </div>
     </div>
 
     <footer>
         <p>Arduitronic - Todos los derechos reservados.</p>
-        <p style="font-size: 0.8rem; color: #aaa;">Desarrollado por DigiWeb Solutions - Ingeniería en Tecnologías de la Información (UPSLP)</p>
+        <p style="font-size: 0.8rem; color: #aaa;">Proyecto Simulado - DigiWeb Solutions (UPSLP)</p>
     </footer>
 
     <script src="app.js"></script>
