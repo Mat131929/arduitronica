@@ -23,13 +23,28 @@ const defaultProducts = [
     { id: 'KIT016', nombre: 'Kit Arduino Deluxe', categoria: 'Herramientas y Prototipado', precio: 1000.00, stock: 3, desc: 'Incluye sensores, motores y componentes.' }
 ];
 
-// Inicializar DB si está vacía
 if (!localStorage.getItem('dbProductos')) { localStorage.setItem('dbProductos', JSON.stringify(defaultProducts)); }
 if (!localStorage.getItem('dbCarrito')) { localStorage.setItem('dbCarrito', JSON.stringify([])); }
 if (!localStorage.getItem('dbVentas')) { localStorage.setItem('dbVentas', JSON.stringify([])); }
 
 // ==========================================
-// 2. UTILIDADES (TOASTS)
+// 2. MODO OSCURO
+// ==========================================
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('arduitronic-theme', isDark ? 'dark' : 'light');
+}
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('arduitronic-theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+// ==========================================
+// 3. UTILIDADES (TOASTS)
 // ==========================================
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
@@ -47,7 +62,7 @@ function showToast(message, type = 'success') {
 }
 
 // ==========================================
-// 3. LÓGICA DE LA TIENDA (CATÁLOGO Y CARRITO)
+// 4. LÓGICA DE LA TIENDA
 // ==========================================
 function renderizarCatalogo() {
     const contenedor = document.getElementById('catalogo-dinamico');
@@ -55,13 +70,10 @@ function renderizarCatalogo() {
 
     const productos = JSON.parse(localStorage.getItem('dbProductos'));
     contenedor.innerHTML = '';
-
-    // Agrupar por categoría
     const categorias = [...new Set(productos.map(p => p.categoria))];
 
     categorias.forEach(cat => {
         const catProds = productos.filter(p => p.categoria === cat);
-        
         const title = document.createElement('h2');
         title.className = 'category-title';
         title.innerText = cat;
@@ -96,10 +108,8 @@ function renderizarCatalogo() {
 function agregarAlCarrito(idProducto) {
     const productos = JSON.parse(localStorage.getItem('dbProductos'));
     let carrito = JSON.parse(localStorage.getItem('dbCarrito'));
-    
     const producto = productos.find(p => p.id === idProducto);
     
-    // Verificar stock temporal en el carrito
     const enCarrito = carrito.filter(item => item.id === idProducto).length;
     if (enCarrito >= producto.stock) {
         showToast('No hay más stock disponible de este producto', 'error');
@@ -150,7 +160,38 @@ function eliminarDelCarrito(index) {
     renderizarCarrito();
 }
 
-// Simulador de Pasarela de Pago
+// ==========================================
+// 5. PROCESAMIENTO DE PAGOS (2 OPCIONES)
+// ==========================================
+
+// OPCIÓN 1: WhatsApp
+function procesarPagoPorWhatsApp() {
+    const carrito = JSON.parse(localStorage.getItem('dbCarrito'));
+    if (carrito.length === 0) {
+        showToast("Agrega productos al carrito primero", "error");
+        return;
+    }
+
+    const nombre = document.getElementById('wa-name').value.trim();
+    if (!nombre) {
+        showToast("Por favor, ingresa tu nombre / matrícula", "error");
+        return;
+    }
+
+    let mensaje = `Hola Arduitronic, soy ${nombre}. Me gustaría apartar el siguiente material escolar:\n\n`;
+    let subtotal = 0;
+
+    carrito.forEach((p) => {
+        mensaje += `- 1x ${p.nombre} ($${p.precio.toFixed(2)})\n`;
+        subtotal += p.precio;
+    });
+
+    mensaje += `\n*Total a pagar en tienda: $${subtotal.toFixed(2)} MXN*\n\nPaso a recogerlo en un momento. ¡Gracias!`;
+    const telefono = "525535692446";
+    window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
+}
+
+// OPCIÓN 2: Tarjeta Simulada
 function procesarPagoSimulado(e) {
     e.preventDefault();
     const carrito = JSON.parse(localStorage.getItem('dbCarrito'));
@@ -164,9 +205,7 @@ function procesarPagoSimulado(e) {
     btn.innerText = "Procesando...";
     btn.disabled = true;
 
-    // Simular tiempo de conexión al banco
     setTimeout(() => {
-        // 1. Guardar la venta
         const ventas = JSON.parse(localStorage.getItem('dbVentas'));
         const total = carrito.reduce((sum, p) => sum + p.precio, 0);
         ventas.push({
@@ -177,29 +216,25 @@ function procesarPagoSimulado(e) {
         });
         localStorage.setItem('dbVentas', JSON.stringify(ventas));
 
-        // 2. Descontar del inventario
         const productos = JSON.parse(localStorage.getItem('dbProductos'));
         carrito.forEach(cartItem => {
             const prodIndex = productos.findIndex(p => p.id === cartItem.id);
             if(prodIndex > -1) { productos[prodIndex].stock -= 1; }
         });
         localStorage.setItem('dbProductos', JSON.stringify(productos));
-
-        // 3. Limpiar carrito y avisar
         localStorage.setItem('dbCarrito', JSON.stringify([]));
+
         showToast('¡Pago aprobado! Redirigiendo...', 'success');
-        
         setTimeout(() => { window.location.href = 'index.html'; }, 2000);
     }, 1500);
 }
 
 // ==========================================
-// 4. LÓGICA DEL PANEL DE ADMINISTRADOR
+// 6. PANEL ADMIN
 // ==========================================
 function loginAdmin(e) {
     e.preventDefault();
     const pass = document.getElementById('admin-pass').value;
-    // Contraseña simulada: admin123
     if (pass === 'admin123') {
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('dashboard-section').style.display = 'block';
@@ -214,7 +249,6 @@ function cargarDatosAdmin() {
     const productos = JSON.parse(localStorage.getItem('dbProductos'));
     const ventas = JSON.parse(localStorage.getItem('dbVentas'));
 
-    // Estadísticas
     const ingresosTotales = ventas.reduce((sum, v) => sum + v.total, 0);
     const articulosVendidos = ventas.reduce((sum, v) => sum + v.items, 0);
     
@@ -222,7 +256,6 @@ function cargarDatosAdmin() {
     document.getElementById('stat-ventas').innerText = ventas.length;
     document.getElementById('stat-articulos').innerText = articulosVendidos;
 
-    // Tabla de Inventario
     const tbody = document.getElementById('admin-inventory-body');
     tbody.innerHTML = '';
     productos.forEach(p => {
@@ -255,16 +288,15 @@ function actualizarStock(id) {
 }
 
 // ==========================================
-// INICIALIZACIÓN
+// INICIALIZACIÓN DE LA PÁGINA
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // Si existe el div de toasts, lo creamos
+    initTheme();
     if (!document.getElementById('toast-container')) {
         const tc = document.createElement('div');
         tc.id = 'toast-container';
         document.body.appendChild(tc);
     }
-
     renderizarCatalogo();
     renderizarCarrito();
 });
