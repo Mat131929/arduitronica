@@ -187,7 +187,7 @@ function procesarPagoPorWhatsApp() {
     });
 
     mensaje += `\n*Total a pagar en tienda: $${subtotal.toFixed(2)} MXN*\n\nPaso a recogerlo en un momento. ¡Gracias!`;
-    const telefono = "525535692446";
+    const telefono = "524861280332";
     window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
 }
 
